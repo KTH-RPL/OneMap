@@ -51,6 +51,7 @@ RUN apt update && apt install -y --no-install-recommends \
     python-is-python3\
     libjpeg-dev libglm-dev libgl1-mesa-glx libegl1-mesa-dev mesa-utils xorg-dev freeglut3-dev \
     unzip &&\
+    apt-get clean all &&\
     rm -rf /var/lib/apt/lists/*
 
 # #
