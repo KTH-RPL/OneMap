@@ -48,16 +48,16 @@ jobs:
         echo "Docker-related files:"
         find . -name "Dockerfile" -o -name "docker-compose.yml" -o -name "docker-compose.yaml"
       
-    # - name: Build with Docker Compose
-    #   run: |
-    #     echo "Starting Docker Compose build..."
-    #     docker compose build --progress=plain
-    #     echo "Docker Compose build completed successfully!"
+    - name: Build with Docker Compose
+      run: |
+        echo "Starting Docker Compose build..."
+        docker compose build --progress=plain
+        echo "Docker Compose build completed successfully!"
         
-    # - name: List built images
-    #   run: |
-    #     echo "Built Docker images:"
-    #     docker images
+    - name: List built images
+      run: |
+        echo "Built Docker images:"
+        docker images
         
     # Optional - Add a test step that runs your container
     # - name: Test container
