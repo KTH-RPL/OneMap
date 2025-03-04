@@ -2,9 +2,9 @@ name: Docker Build
 
 on:
   push:
-    branches: [ main, master ]  # Adjust based on your primary branch name
+    branches: [ main, devel ]  # Adjust based on your primary branch name
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, devel ]
 
 jobs:
   build:
@@ -13,7 +13,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      
+         
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2     
     - name: Print Docker and Docker Compose versions
       run: |
         echo "Docker version:"
@@ -22,10 +24,23 @@ jobs:
         docker compose version
         echo "System info:"
         uname -a
+    - name: Free up disk space
+      run: |
+        echo "Disk space before cleanup:"
+        df -h
         
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-      
+        # Remove unnecessary large packages
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /opt/ghc
+        sudo rm -rf /opt/hostedtoolcache
+        
+        # Clean apt cache
+        sudo apt clean
+        sudo apt autoremove --yes
+        
+        echo "Disk space after cleanup:"
+        df -h   
     - name: List files in directory
       run: |
         echo "Repository contents:"
@@ -33,16 +48,16 @@ jobs:
         echo "Docker-related files:"
         find . -name "Dockerfile" -o -name "docker-compose.yml" -o -name "docker-compose.yaml"
       
-    - name: Build with Docker Compose
-      run: |
-        echo "Starting Docker Compose build..."
-        docker compose build --progress=plain
-        echo "Docker Compose build completed successfully!"
+    # - name: Build with Docker Compose
+    #   run: |
+    #     echo "Starting Docker Compose build..."
+    #     docker compose build --progress=plain
+    #     echo "Docker Compose build completed successfully!"
         
-    - name: List built images
-      run: |
-        echo "Built Docker images:"
-        docker images
+    # - name: List built images
+    #   run: |
+    #     echo "Built Docker images:"
+    #     docker images
         
     # Optional - Add a test step that runs your container
     # - name: Test container
