@@ -129,13 +129,13 @@ rerun
 ```
 and launch the example in the container with:
 ``` 
-python3 habitat_test.py --config/mon/base_conf_sim.yaml
+python3 habitat_test.py --config config/mon/base_conf_sim.yaml
 ```
 #### Local
 Open the rerun viewer and example from the root of the repository with:
 ```
 rerun
-python3 habitat_test.py --config/mon/base_conf_sim.yaml
+python3 habitat_test.py --config config/mon/base_conf_sim.yaml
 ```
 ### 2. Run the evaluation
 You can reproduce the evaluation results from the paper for single- and multi-object navigation.
