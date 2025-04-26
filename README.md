@@ -89,6 +89,10 @@ cd OneMap/
 python3 -m pip install gdown torch torchvision torchaudio meson
 python3 -m pip install -r requirements.txt
 ```
+NOTE: Fix to build habitat-sim:
+```
+CMAKE_ARGS="-DCMAKE_POLICY_VERSION_MINIMUM=3.5"  python3 -m pip install git+https://github.com/facebookresearch/habitat-sim.git@v0.2.4
+```
 Manually install newer `timm` version:
 ```
 python3 -m pip install --upgrade timm>=1.0.7

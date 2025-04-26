@@ -4,7 +4,7 @@ salesforce-lavis
 rerun-sdk
 #timm>=1.0.7
 git+https://github.com/facebookresearch/detectron2.git
-git+https://github.com/facebookresearch/habitat-sim.git@v0.2.4
+#git+https://github.com/facebookresearch/habitat-sim.git@v0.2.4
 inference-gpu[yolo-world]
 supervision
 spock-config

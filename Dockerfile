@@ -59,6 +59,7 @@ COPY requirements.txt .
 RUN python3 -m pip install gdown torch torchvision torchaudio meson
 RUN python3 -m pip install -r requirements.txt
 RUN python3 -m pip install --upgrade timm>=1.0.7
+RUN CMAKE_ARGS="-DCMAKE_POLICY_VERSION_MINIMUM=3.5"  python3 -m pip install git+https://github.com/facebookresearch/habitat-sim.git@v0.2.4
 # #
 # #
 RUN git clone https://github.com/WongKinYiu/yolov7
