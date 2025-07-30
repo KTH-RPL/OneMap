@@ -384,8 +384,8 @@ class OneMap:
         # TODO this will be wrong for sub-sampled as e.g. fx will be wrong
         depth_image_smoothed = depth_aligned
 
-        mask = depth_image_smoothed == float('inf')
-        depth_image_smoothed[mask] = depth_image_smoothed[~mask].max()
+        # mask = depth_image_smoothed == float('inf')
+        # depth_image_smoothed[mask] = depth_image_smoothed[~mask].max()
         kernel_size = 11
         pad = kernel_size // 2
 

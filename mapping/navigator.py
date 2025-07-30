@@ -324,14 +324,16 @@ class Navigator:
                 best_nav_goal = self.nav_goals[best_idx]
                 self.cyclic_checker.add_state_action(start, best_nav_goal.get_descr_point(), top_two_vals)
                 if isinstance(best_nav_goal, Frontier):
-                    self.path = Planning.compute_to_goal(start, self.one_map.navigable_map & (
-                            self.one_map.confidence_map > 0).cpu().numpy(),
+                    # NOTE Allow more aggressive planning through unknown regions
+                    self.path = Planning.compute_to_goal(start, self.one_map.navigable_map, # & (
+                            #self.one_map.confidence_map > 0).cpu().numpy(),
                                                          (self.one_map.confidence_map > 0).cpu().numpy(),
                                                          best_nav_goal.get_descr_point(),
                                                          self.obstcl_kernel_size, 2)
                 elif isinstance(best_nav_goal, Cluster):
-                    self.path = Planning.compute_to_goal(start, self.one_map.navigable_map & (
-                            self.one_map.confidence_map > 0).cpu().numpy(),
+                    # NOTE Allow more aggressive planning through unknown regions
+                    self.path = Planning.compute_to_goal(start, self.one_map.navigable_map,# & (
+                            # self.one_map.confidence_map > 0).cpu().numpy(),
                                                          (self.one_map.confidence_map > 0).cpu().numpy(),
                                                          best_nav_goal.get_descr_point(),
                                                          # TODO we might want to consider all the points of the cluster!
@@ -488,7 +490,7 @@ class Navigator:
 
         px, py = self.one_map.metric_to_px(x, y)
         if self.last_pose:
-            if np.linalg.norm(np.array([px, py, yaw]) - np.array(self.last_pose)) < 0.01:
+            if px == self.last_pose[0] and py == self.last_pose[1] and abs(yaw - self.last_pose[2]) < 0.001:
                 if self.path is not None:
                     self.stuck_at_cell_counter += 1
             else:
@@ -610,12 +612,16 @@ class Navigator:
                                 self.chosen_detection = (x_masked[best], y_masked[best])
                     else:
                         best = np.argmin(depths)
-                        if self.object_detected:
-                            if adjusted_score[x_id[best], y_id[best]] < \
-                                    adjusted_score[self.chosen_detection[0], self.chosen_detection[1]] * 1.1:
-                                object_valid = False
-                        if object_valid:
-                            self.chosen_detection = (x_id[best], y_id[best])
+                        # NOTE More aggressive reselection of the best point
+                        # ---- Commented out to match single-object results ---
+                        # if self.object_detected:
+                        #     if adjusted_score[x_id[best], y_id[best]] < \
+                        #             adjusted_score[self.chosen_detection[0], self.chosen_detection[1]] * 1.1:
+                        #         object_valid = False
+                        # if object_valid:
+                            # self.chosen_detection = (x_id[best], y_id[best])
+                        # --- End of comment ---
+                        self.chosen_detection = (x_id[best], y_id[best])
                     if object_valid:
                         self.object_detected = True
                         self.compute_best_path(start)

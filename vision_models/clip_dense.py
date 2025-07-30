@@ -105,22 +105,12 @@ class ClipModel(torch.nn.Module, BaseModel):
             class_embeddings = self.clip_model.encode_text(text_tokenized)
             return F.normalize(class_embeddings, dim=1)
 
-    # def forward_text_trt(self, text_tokenized):
-    #
-    #
-    #
-    # #class_embeddings = self.clip_model.encode_text(text_tokenized)
-    #
-    #
-    #
-    #
-    # return F.normalize(torch.tensor(output), dim=1)
-
     def image_forward_torch(self, clip_images: torch.Tensor):
         with torch.no_grad():
+            # NOTE Moved normalization to the beginning to match the paper implementation
+            clip_images = (clip_images - self.clip_mean) / self.clip_std
             clip_images = F.interpolate(clip_images, size=self.clip_resolution, mode='bilinear',
                                         align_corners=False, )
-            clip_images = (clip_images - self.clip_mean) / self.clip_std
             clip_features = self.clip_model.encode_image(clip_images, dense=True)
             clip_vis_dense = clip_features["clip_vis_dense"]
 

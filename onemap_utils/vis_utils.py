@@ -20,7 +20,7 @@ def log_map_rerun(map_, path, needs_orientation=False):
         map_ = map_.transpose((1, 0))
         map_ = np.flip(map_, axis=0)
     map_ = monochannel_to_inferno_rgb(map_)
-    rr.log(path, rr.Image(np.flip(map_, axis=-1)).compress(jpeg_quality=50))
+    rr.log(path, rr.Image(np.flip(map_, axis=-1)))
 
 
 def publish_sim_map(sim_map, br, publisher):

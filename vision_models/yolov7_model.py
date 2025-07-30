@@ -61,13 +61,14 @@ class YOLOv7Detector:
                ):
         a = time.time()
         orig_shape = image.shape
-
-        img = cv2.resize(
-             image,
-             (self.image_size, int(self.image_size * 0.7)),
-             interpolation=cv2.INTER_AREA,
-        )
-        img = img
+        # NOTE removed this, as it was not used in the original code. 
+        # NOTE We added this to experiment with VLFM's yolov7 setup when investigating false positives.
+        # img = cv2.resize(
+        #      image,
+        #      (self.image_size, int(self.image_size * 0.7)),
+        #      interpolation=cv2.INTER_AREA,
+        # )
+        img = image
         img = letterbox(img, new_shape=self.image_size)[0]
         img = img.transpose(2, 0, 1)
         img = np.ascontiguousarray(img)
@@ -86,7 +87,7 @@ class YOLOv7Detector:
         # Apply NMS
         pred = non_max_suppression(
             pred,
-            0.25,
+            self.confidence_threshold,
             0.45,
             classes=self.classes_oi,
             agnostic=False,
@@ -105,14 +106,13 @@ class YOLOv7Detector:
         for i in range(pred.shape[0]):
             class_name = COCO_CLASSES[int(pred[i, 5])]
             if class_name == self.classes[0]:
-                if logits[i] > self.confidence_threshold:
-                    box = boxes[i]
-                    if not (box[0].item() == box[2].item() or box[1].item() == box[3].item()):
-                        preds["boxes"].append([box[0].item(), box[1].item(), box[2].item(), box[3].item()])
-                        preds["scores"].append(logits[i])
-                        print(logits[i])
+                box = boxes[i]
+                if not (box[0].item() == box[2].item() or box[1].item() == box[3].item()):
+                    preds["boxes"].append([box[0].item(), box[1].item(), box[2].item(), box[3].item()])
+                    preds["scores"].append(logits[i])
+                    # print(logits[i])
 
-        print(f"YOLO forward: {time.time() - a}")
+        # print(f"YOLO forward: {time.time() - a}")
         return preds
 
 if __name__ == "__main__":

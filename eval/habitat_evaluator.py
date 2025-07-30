@@ -302,7 +302,6 @@ class HabitatEvaluator:
         results = []
         # restart at 930
         for n_ep, episode in enumerate(self.episodes):
-        # for n_ep, episode in enumerate(self.episodes[492:]):
             poses = []
             results.append(Result.FAILURE_OOT)
             steps = 0

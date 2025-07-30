@@ -275,7 +275,9 @@ class RerunLogger:
         if self.to_file:
             rr.save(save_path)
         else:
-            rr.connect("127.0.0.1:9876")
+            # NOTE Update to match newer rerun version
+            rr.connect_grpc("rerun+http://127.0.0.1:9876/proxy") # Connect to Rerun server
+            print("Connected to Rerun server.")
         if self.debug_log:
             setup_blueprint_debug()
         else:
