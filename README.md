@@ -143,6 +143,8 @@ python3 habitat_test.py --config config/mon/base_conf_sim.yaml
 ```
 ### 2. Run the evaluation
 You can reproduce the evaluation results from the paper for single- and multi-object navigation.
+
+**Note** that to reproduce the paper results for single-object navigation, it is advised to use the [eval/s_eval](https://github.com/KTH-RPL/OneMap/tree/eval/s_eval) branch.
 #### Single-object navigation
 ```
 python3 eval_habitat.py --config config/mon/eval_conf.yaml
