@@ -587,7 +587,11 @@ class HabitatMultiEvaluator:
                         final_sim = final_sim.transpose((1, 0, 2))
                         final_sim = np.flip(final_sim, axis=0)                        # get min and max x and y of confs
 
-
+                        # Create directories to avoid missing path errors
+                        os.makedirs(f"{self.results_path}/trajectories", exist_ok=True)
+                        os.makedirs(f"{self.results_path}/similarities", exist_ok=True)
+                        os.makedirs(f"{self.results_path}/state", exist_ok=True)
+                        
                         cv2.imwrite(f"{self.results_path}/similarities/final_sim_{episode.episode_id}_{sequence_id}.png", final_sim)
                         # Create the plot
                         plt.figure(figsize=(10, 10))
