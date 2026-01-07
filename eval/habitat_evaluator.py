@@ -119,6 +119,7 @@ class HabitatEvaluator:
             self.logger = rerun_logger.RerunLogger(self.actor.mapper, False, "") if self.log_rerun else None
         self.results_path = "/home/finn/active/MON/results_gibson" if self.is_gibson else "results/"
 
+
     def load_scene(self, scene_id: str):
         if self.sim is not None:
             self.sim.close()
@@ -408,6 +409,12 @@ class HabitatEvaluator:
                 results[n_ep] = Result.FAILURE_STUCK
 
             num_frontiers = len(self.actor.mapper.nav_goals)
+
+            # Create directories to avoid missing path errors
+            os.makedirs(f"{self.results_path}/trajectories", exist_ok=True)
+            os.makedirs(f"{self.results_path}/similarities", exist_ok=True)
+            os.makedirs(f"{self.results_path}/state", exist_ok=True)
+
             np.savetxt(f"{self.results_path}/trajectories/poses_{episode.episode_id}.csv", poses, delimiter=",")
             # save final sim to image file
             final_sim = (self.actor.mapper.get_map() + 1.0) / 2.0
