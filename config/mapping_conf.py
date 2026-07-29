@@ -23,3 +23,5 @@ class MappingConf:
     floor_level: float
     floor_threshold: float
 
+    use_cuda_backend: bool = False
+

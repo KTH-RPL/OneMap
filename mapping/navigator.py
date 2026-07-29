@@ -4,7 +4,7 @@ for navigation and exploration.
 """
 import time
 
-from mapping import (OneMap, detect_frontiers, get_frontier_midpoint,
+from mapping import (create_onemap, detect_frontiers, get_frontier_midpoint,
                      cluster_high_similarity_regions, find_local_maxima,
                      watershed_clustering, gradient_based_clustering, cluster_thermal_image,
                      Cluster, NavGoal, Frontier)
@@ -143,7 +143,7 @@ class Navigator:
         self.sam.eval()
         self.sam_predictor = SamPredictor(self.sam)
 
-        self.one_map = OneMap(self.model.feature_dim, config.mapping, map_device="cpu")
+        self.one_map = create_onemap(self.model.feature_dim, config.mapping, map_device="cpu")
 
         self.query_text = ["Other."]
         self.query_text_features = self.model.get_text_features(self.query_text).to(self.one_map.map_device)

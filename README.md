@@ -29,11 +29,38 @@ In summary we open-source:
 - The multi-object navigation dataset generation code, such that you can generate your own datasets
 
 ## Changes
+- [29/07/2026]: Released the CUDA port of the mapping backend as [CuOneMap](https://github.com/finnBsch/CuOneMap), usable from here as an experimental drop-in backend. See [CUDA backend](#cuda-backend-experimental).
 - [28/10/2025]: Docker build to CUDA 12.8 for RTX 50 series support. Fixed issues with reading the results for multi-object nav.
 
 ## Upcoming Changes
 - Change annotation format for multi-object nav to match paper naming, see below.
-- Release full CUDA port of onemap.
+
+## CUDA backend (experimental)
+
+The mapping update in `mapping/feature_map.py` is also available as a CUDA implementation,
+[CuOneMap](https://github.com/finnBsch/CuOneMap). It is a drop-in replacement that reproduces the same maps to
+float tolerance: roughly 3x faster at the map settings shipped here, and up to 40x on large maps with wide blur
+kernels. It can keep the feature map in system RAM, so GPU memory stays available for the vision models.
+
+Install it without cloning:
+
+```
+pip install git+https://github.com/finnBsch/CuOneMap.git
+```
+
+Then enable it in your mapping config:
+
+```yaml
+MappingConf:
+  use_cuda_backend: True
+```
+
+or set `ONEMAP_BACKEND=cuda`. If the module is not installed, OneMap falls back to the PyTorch implementation.
+
+This backend is **experimental**. One preprocessing step differs from the PyTorch version on purpose, so results
+are close but not bit-identical — the [CuOneMap README](https://github.com/finnBsch/CuOneMap#differences-from-the-reference)
+lists every known difference, along with benchmarks and scripts to verify it against this implementation. We would
+love to hear how it works for you: please open an issue with feedback or problems.
 
 ## Abstract
 The capability to efficiently search for objects in complex environments is fundamental for many real-world robot 

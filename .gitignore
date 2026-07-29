@@ -9,3 +9,7 @@ results*/
 yolov7
 weights
 datasets
+# Profiling artifacts
+*.nsys-rep
+*.ncu-rep
+*.sqlite
